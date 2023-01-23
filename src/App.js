@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { ADD_TASK, REMOVE_TASK } from './store'
 
 function App() {
+  const [inputTask, setInputTask] = useState()
+
+  const tasks = useSelector(state => state.data)
+  const dispatch = useDispatch()
+
+  const handleInput = e => {
+    setInputTask(e.target.value)
+  }
+
+  const handleSubmit = () => {
+    dispatch( ADD_TASK(inputTask))
+    setInputTask('3')
+  }
+
+  const handleRemove = e => {
+    dispatch( REMOVE_TASK(e))
+    
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <ul>
+        {
+          tasks.map(task =>
+              <li key={task}>
+                {task} <button onClick={() => handleRemove(task)}>X</button>
+              </li>
+            )
+        }
+      </ul>
+      <input type="text" onChange={handleInput} />
+      <button onClick={handleSubmit}>ADD TASK</button>
+    </>
+  )
 }
 
-export default App;
+export default App
